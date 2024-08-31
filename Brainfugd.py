@@ -1,13 +1,14 @@
 # Start Date: 2/8/2024
 """
 To Do:
-1. Implement poly-cell mode and debug mode
+1. Implement poly-cell mode
 4. Make code readable
 """
 import random
 print("\t\t\t\t\t\t Welcome to BrainFugd")
 print("\t\t\t\tA programming language for your gmd software\n")
 help = 0
+debug_mode = False
 # Help
 while help == 0:
   start = str(input("Type 'start' to begin: "))
@@ -28,7 +29,8 @@ while help == 0:
     print("\n4. Make sure to only use the above characters or you will get an error")
     print("\n5. The currently selected call has an '^' below it. This is called the cell selector")
     print("\n6. Make sure to close a '[' with ']' and vice versa. Open brackets will give errors")
-    print("\n7. This is a program recreating another programming language called BrainF***(Yes it actually exists go look it up)")
+    print("\n7. Challenges will have character limits to encourage you think of the most optimal way to solve a problem. If you don't like that... suffer")
+    print("\n8. This is a program recreating another programming language called BrainF***(Yes it actually exists go look it up)")
     print("\n9. I have given you certain tasks to complete using this programming language. You don't get rewards(naturally) but it will test your intelligence")
     print("\n10. With all that said, you can use use 'skip' to skip this message the next time you run the program")
     ask = str(input("Show examples? (You need to see and understand these atleast once)[y/n]: "))
@@ -37,14 +39,15 @@ while help == 0:
       print("+++++.!\t Adds 5 to first cell and outputs 5 along with the E(the corresponding letter)")
       print("+>+>+!\t Adds 1 to the first 3 cells")
       print("+++[->++<]!\t Adds 3 to first cell. Then it subtracts 1 then and adds 2 to the next cell. It keeps doing this until the first cell is 0 and the second cell is 6. Notice how this essentially multiplies 3 with 2.\n")
-      print("You are now ready to begin coding!\n")
     help = 1
     break
   elif start == "skip":
     help = 1
     break
   elif start == "debug_mode":
+    print("\n Debug Mode Enabled...\n")
     debug_mode = True
+    help = 1
   else:
     print("Please input 'start' to begin")
     help = 0
@@ -53,7 +56,6 @@ print("\n")
 
 ## The actual code
 #Cheat codes: SCCSM, SCCRS, SCCSC
-#Achievements: c4, c6, s, cc, oc1, oc3
 
 #Initialization
 challenge_count = 0
@@ -64,6 +66,7 @@ reveal_check = False
 os = ""
 c = -1
 str_length = 0
+c_limit = 0
 loop_end = None
 loop_start = None
 output = ""
@@ -104,8 +107,8 @@ def Reveal():
     print("\nSolution: ,>,[->+<]>.!")
   elif challenge_count == 4:
     print("\nSolution: +>>,>,[[-<]>>]>>[>]>>+<<<[<]<<.!")
-  elif challenge_count == 5:
-    print("\nSolution: ")
+  # elif challenge_count == 5:
+  #   print("\nSolution: ")
   elif challenge_count > 5:
     print("No solution to reveal.")
   reveal_check = True
@@ -135,7 +138,7 @@ def reset_cells():
   updater()
 
 def translator(inp):
-  global cells, cell_list, c_multiplier, current_cell, c, str_length, loop_end, loop_start, otpt, os, r_value, r_list, c5_list
+  global cells, cell_list, c_multiplier, current_cell, c, str_length, loop_end, loop_start, otpt, os, r_value, r_list, c5_list,c_limit
   otpt=""
   os = ""
   while c <= str_length:
@@ -145,6 +148,9 @@ def translator(inp):
     c+=1
     updater()
     str_length = len(inp)-1
+    if str_length > c_limit:
+      print("\n Character limit exceeded!")
+      break
     if inp[c] == "+":
       cell_list[c_multiplier] += 1
       updater()
@@ -297,13 +303,13 @@ def answer_check(cc,o):
       else:
         r_list = []
         return False
-  if cc == 5:
-    if o == str((r_list[0]+1)**r_list[1])+"\t":
-      r_list = []
-      return True
-    else:
-      r_list = []
-      return False
+  # if cc == 5:
+  #   if o == str((r_list[0]+1)**r_list[1])+"\t":
+  #     r_list = []
+  #     return True
+  #   else:
+  #     r_list = []
+  #     return False
       
 
 
@@ -313,6 +319,7 @@ while True:
     print("\nChallenge 1\n")
     print("Print 3\n")
     while challenge_count == 0:
+      c_limit = 10
       code()
       if challenge_count>0:
         break
@@ -333,6 +340,7 @@ while True:
     reset_cells()
     print("\nChallenge 2\n\nPrint 40\n")
     while challenge_count == 1:
+      c_limit = 25
       code()
       if challenge_count>1:
         break
@@ -354,6 +362,7 @@ while True:
     reset_cells()
     print("\nChallenge 3\n\nTake a number as input and ouput double that number.\n")
     while challenge_count == 2:
+      c_limit = 15
       code()
       if challenge_count>2:
         break
@@ -390,6 +399,7 @@ while True:
     reset_cells()
     print("\nChallenge 4\n\nTake 2 numbers as input and ouput their sum.\n")
     while challenge_count == 3:
+      c_limit = 15
       code()
       if challenge_count>3:
         break
@@ -426,6 +436,7 @@ while True:
     reset_cells()
     print("\nChallenge 5\n\nTake 2 numbers as input and ouput the difference of the greater number from the smaller one.\n")
     while challenge_count == 4:
+      c_limit = 35
       code()
       if challenge_count>4:
         break
@@ -458,41 +469,41 @@ while True:
       else:
         continue
   
-  if challenge_count == 5:
-    reset_cells()
-    print("\nChallenge 6\n\nTake 2 numbers as input and output the value of (1+x)^n where x is the first input and n is the second input.\n")
-    print("Hint: Just add 1 to the first input and then all you have to do is square it.\n")
-    while challenge_count == 5:
-      code()
-      if challenge_count>5:
-        break
-      if reveal_check == True:
-        reveal_check == False
-        continue
-      output = translator(input_code)
-      challenge_passed = answer_check(challenge_count,output)
-      if challenge_passed == True:
-        triple_trial+=1
-        if triple_trial == 1:
-          print("\nChallenge Success 1/3\n")
-        if triple_trial == 2:
-          print("\nChallenge Success 2/3\n")
-        if triple_trial == 3:
-          print("\nChallenge Success 3/3\n")
-        reset_cells()
-      else:
-        print("\nChallenge Failed\n")
-        reset_cells()
-        triple_trial = 0
-        continue
-      if triple_trial == 3:
-        print("Challenge 6 passed!")
-        challenge_count += 1
-        triple_trial = 0
-        reset_cells()
-        break
-      else:
-        continue
+  # if challenge_count == 5:
+  #   reset_cells()
+  #   print("\nChallenge 6\n\nTake 2 numbers as input and output the value of (1+x)^n where x is the first input and n is the second input.\n")
+  #   print("Hint: Just add 1 to the first input and then all you have to do is square it.\n")
+  #   while challenge_count == 5:
+  #     code()
+  #     if challenge_count>5:
+  #       break
+  #     if reveal_check == True:
+  #       reveal_check == False
+  #       continue
+  #     output = translator(input_code)
+  #     challenge_passed = answer_check(challenge_count,output)
+  #     if challenge_passed == True:
+  #       triple_trial+=1
+  #       if triple_trial == 1:
+  #         print("\nChallenge Success 1/3\n")
+  #       if triple_trial == 2:
+  #         print("\nChallenge Success 2/3\n")
+  #       if triple_trial == 3:
+  #         print("\nChallenge Success 3/3\n")
+  #       reset_cells()
+  #     else:
+  #       print("\nChallenge Failed\n")
+  #       reset_cells()
+  #       triple_trial = 0
+  #       continue
+  #     if triple_trial == 3:
+  #       print("Challenge 6 passed!")
+  #       challenge_count += 1
+  #       triple_trial = 0
+  #       reset_cells()
+  #       break
+  #     else:
+  #       continue
   if challenge_count>5:
     code()
     if reveal_check == True:
