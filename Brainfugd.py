@@ -2,6 +2,7 @@
 """
 To Do:
 1. Implement poly-cell mode and debug mode
+2. Remember to update reveals
 3. Cell selector offset
 4. Make code readable
 """
