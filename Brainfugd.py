@@ -2,7 +2,6 @@
 """
 To Do:
 1. Implement poly-cell mode and debug mode
-3. Cell selector offset
 4. Make code readable
 """
 import random
