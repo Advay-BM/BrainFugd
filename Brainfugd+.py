@@ -63,6 +63,7 @@ challenge_passed = False
 output = ""
 input_code = ""
 reveal_check = False
+comma_counter = 0
 os = ""
 c = -1
 str_length = 0
@@ -105,11 +106,11 @@ def Reveal():
   elif challenge_count == 2:
     print("\nSolution: ,[->++<]>.!")
   elif challenge_count == 3:
-    print("\nSolution: ,>,[->+<]>.!")
+    print("\nSolution: ,>,[-<+>]<.!")
   elif challenge_count == 4:
     print("\nSolution: +>>,>,[[-<]>>]>>[>]>>+<<<[<]<<.!")
-  # elif challenge_count == 5:
-  #   print("\nSolution: ")
+  elif challenge_count == 5:
+    print("\nSolution: Im still figuring it out myself(Translation: Im lazy)")
   elif challenge_count > 5:
     print("No solution to reveal.")
   reveal_check = True
@@ -120,7 +121,7 @@ def code():
   print(cells)
   input_code = str(input("\nC:\Brainfugd> "))
   if input_code == "SCCSM":
-    print("\nSandbox Mode enabled!\n")
+    print("\nSandbox Mode enabled\n")
     challenge_count = 7
   elif input_code == "SCCRS":
     print("Revealing solution...")
@@ -142,6 +143,7 @@ def translator(inp):
   global cells, cell_list, c_multiplier, current_cell, c, str_length, loop_end, loop_start, otpt, os, r_value, r_list, c5_list,c_limit
   otpt=""
   os = ""
+  c=-1
   while c <= str_length:
     if debug_mode == True:
       print(cells)
@@ -238,7 +240,8 @@ def translator(inp):
     elif inp[c] == ",":
       updater()
       if challenge_count <=1:
-        print("\nInput command cannot be used for this challenge.\n")
+        print("\nError 09: Input command cannot be used for this challenge.\n")
+        c=-1
         break
       if challenge_count <= 5:
         if challenge_count == 4:
@@ -275,7 +278,7 @@ def translator(inp):
   return otpt
 
 def answer_check(cc,o):
-  global r_value, r_list
+  global r_value, r_list, input_code, comma_counter
   if cc == 0:
     if o == "3\tC":
       return True
@@ -287,6 +290,14 @@ def answer_check(cc,o):
     else:
       return False
   if cc == 2:
+    for i in input_code:
+      if i == ",":
+        comma_counter+=1
+    if comma_counter !=1:
+      print("\nError 08: One input command is required for this challenge\n")
+      comma_counter = 0
+      return False
+    comma_counter = 0
     if o == str(2*r_list[0])+"\t"+dict[2*r_list[0]]:
       r_list = []
       return True
@@ -294,6 +305,14 @@ def answer_check(cc,o):
       r_list = []
       return False
   if cc == 3:
+    for i in input_code:
+      if i == ",":
+        comma_counter+=1
+    if comma_counter !=2:
+      print("\nError 08: Two input commands are required for this challenge\n")
+      comma_counter = 0
+      return False
+    comma_counter = 0
     if o == str(r_list[0]+r_list[1])+"\t"+dict[r_list[0]+r_list[1]]:
       r_list = []
       return True
@@ -301,6 +320,14 @@ def answer_check(cc,o):
       r_list = []
       return False
   if cc == 4:
+    for i in input_code:
+      if i == ",":
+        comma_counter+=1
+    if comma_counter !=2:
+      print("\nError 08: Two input commands are required for this challenge\n")
+      comma_counter = 0
+      return False
+    comma_counter = 0
     if r_list[0] > r_list[1]:
       if o == str(r_list[0]-r_list[1])+"\t"+dict[r_list[0]-r_list[1]]:
         r_list = []
@@ -323,6 +350,14 @@ def answer_check(cc,o):
         r_list = []
         return False
   if cc == 5:
+    for i in input_code:
+      if i == ",":
+        comma_counter+=1
+    if comma_counter !=2:
+      print("\nError 08: Two input commands are required for this challenge\n")
+      comma_counter = 0
+      return False
+    comma_counter = 0
     if (r_list[0]+1)**r_list[1]<=26:
       d = str(dict[(r_list[0]+1)**r_list[1]])
     else:
@@ -345,7 +380,7 @@ while True:
       if challenge_count>0:
         break
       if reveal_check == True:
-        reveal_check == False
+        reveal_check = False
         continue
       output = translator(input_code)
       challenge_passed = answer_check(challenge_count,output)
@@ -367,7 +402,7 @@ while True:
       if challenge_count>1:
         break
       if reveal_check == True:
-        reveal_check == False
+        reveal_check = False
         continue
       output = translator(input_code)
       challenge_passed = answer_check(challenge_count,output)
@@ -390,7 +425,7 @@ while True:
       if challenge_count>2:
         break
       if reveal_check == True:
-        reveal_check == False
+        reveal_check = False
         continue
       output = translator(input_code)
       challenge_passed = answer_check(challenge_count,output)
@@ -429,7 +464,7 @@ while True:
       if challenge_count>3:
         break
       if reveal_check == True:
-        reveal_check == False
+        reveal_check = False
         continue
       output = translator(input_code)
       challenge_passed = answer_check(challenge_count,output)
@@ -467,7 +502,7 @@ while True:
       if challenge_count>4:
         break
       if reveal_check == True:
-        reveal_check == False
+        reveal_check = False
         continue
       output = translator(input_code)
       challenge_passed = answer_check(challenge_count,output)
@@ -488,7 +523,7 @@ while True:
         continue
       if triple_trial == 3:
         print("Challenge 5 passed!")
-        print("\nHint: Using SCCRS in the interpreter will allow you to reveal the optimal solution to a challenge while using SCCSC will skip non-optional challenges entirely.\n")
+        print("\nHint: Using SCCRS in the interpreter will allow you to reveal the optimal solution to a challenge while using SCCSC will skip challenges entirely.\n")
         challenge_count += 1
         triple_trial = 0
         reset_cells()
@@ -506,7 +541,7 @@ while True:
         if challenge_count>5:
           break
         if reveal_check == True:
-          reveal_check == False
+          reveal_check = False
           continue
         output = translator(input_code)
         challenge_passed = answer_check(challenge_count,output)
@@ -532,11 +567,12 @@ while True:
           break
         else:
           continue
+  print("\nAll challenges completed, entering sandbox mode...\n")
   if challenge_count>5:
     code()
     c_limit = 2147483646
     if reveal_check == True:
-      reveal_check == False
+      reveal_check = False
       continue
     if input_code == "quit" or input_code == "q":
       break
