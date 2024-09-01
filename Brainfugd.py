@@ -82,6 +82,7 @@ c4 = 0
 c5 = 0
 c6 = 0
 cell_list = [c1,c2,c3,c4,c5,c6]
+char_list = ["+","-","<",">","]","[",".",",","!"]
 r_list = []
 c_multiplier = 0
 current_cell = cell_list[c_multiplier]
@@ -147,9 +148,19 @@ def translator(inp):
       input("Press enter to continue")
     c+=1
     updater()
+    if inp[c] not in char_list:
+      print(f"\nError 02: Invalid character {str(inp[c])}")
+      break
     str_length = len(inp)-1
     if str_length > c_limit:
-      print("\n Character limit exceeded!")
+      if str_length > 2147483646 :
+        print(f"n Error 01: Character limit exceeded at wait what... how did you do that?")      
+      print(f"\n Error 01: Character limit exceeded at {inp[c_limit]}")
+      c=-1
+      break
+    if "!" not in inp:
+      print("\nError 05: Missing '!'")
+      c=-1
       break
     if inp[c] == "+":
       cell_list[c_multiplier] += 1
@@ -188,6 +199,7 @@ def translator(inp):
             break
       if loop_end == None:
         print("\nError 04: Missing ']'")
+        c=-1
         break
       if current_cell != 0:
         continue
@@ -208,6 +220,7 @@ def translator(inp):
             break
       if loop_start == None:
         print("\nError 03: Missing '['")
+        c=-1
         break
       else:
         if current_cell == 0:
@@ -246,7 +259,13 @@ def translator(inp):
           print(f"\nAnticheat, entering random value...\n Value: {str(r_value)}({dict[r_value]})\n")
           cell_list[c_multiplier] = r_value
       else:
-        cell_list[c_multiplier] = int(input("\nEnter a value: "))
+        comma = int(input("\nEnter a value: "))
+        if type(comma) != type(-69) or comma<0:
+          print("\nError 06: Input can only be of type 'whole number'")
+          c=-1
+          break
+        else:
+          cell_list[c_multiplier] = comma
       updater()
     elif inp[c] == "!":
       c=-1
@@ -303,23 +322,25 @@ def answer_check(cc,o):
       else:
         r_list = []
         return False
-  # if cc == 5:
-  #   if o == str((r_list[0]+1)**r_list[1])+"\t":
-  #     r_list = []
-  #     return True
-  #   else:
-  #     r_list = []
-  #     return False
-      
-
-
+  if cc == 5:
+    if (r_list[0]+1)**r_list[1]<=26:
+      d = str(dict[(r_list[0]+1)**r_list[1]])
+    else:
+      d = ""
+    if o == f"{str((r_list[0]+1)**r_list[1])}\t{d}":
+      r_list = []
+      return True
+    else:
+      r_list = []
+      return False
 #Main Loop
 while True:
   if challenge_count == 0:
     print("\nChallenge 1\n")
     print("Print 3\n")
+    print("Character Limit: 25")
     while challenge_count == 0:
-      c_limit = 10
+      c_limit = 25
       code()
       if challenge_count>0:
         break
@@ -339,8 +360,9 @@ while True:
   if challenge_count == 1:
     reset_cells()
     print("\nChallenge 2\n\nPrint 40\n")
+    print("Character Limit: 40\n")
     while challenge_count == 1:
-      c_limit = 25
+      c_limit = 40
       code()
       if challenge_count>1:
         break
@@ -361,8 +383,9 @@ while True:
   if challenge_count == 2:
     reset_cells()
     print("\nChallenge 3\n\nTake a number as input and ouput double that number.\n")
+    print("Character Limit: 30\n")
     while challenge_count == 2:
-      c_limit = 15
+      c_limit = 30
       code()
       if challenge_count>2:
         break
@@ -387,6 +410,7 @@ while True:
         continue
       if triple_trial == 3:
         print("\nChallenge 3 passed!\n")
+        print("\nHint: Typing 'debug_mode' when you run the code will allow you to go step by step with the execution of your code.\n")
         challenge_count += 1
         triple_trial = 0
         reset_cells()
@@ -398,8 +422,9 @@ while True:
   if challenge_count == 3:
     reset_cells()
     print("\nChallenge 4\n\nTake 2 numbers as input and ouput their sum.\n")
+    print("Character Limit: 30\n")
     while challenge_count == 3:
-      c_limit = 15
+      c_limit = 30
       code()
       if challenge_count>3:
         break
@@ -424,7 +449,7 @@ while True:
         continue
       if triple_trial == 3:
         print("Challenge 4 passed!")
-        print("\n Sandbox mode unlocked!\n Typing SCCSM in the interpreter will now enter sandbox mode. You can no longer re-enter challenge mode after entering into sandbox mode.\n")
+        print("\n Hint: Typing SCCSM in the interpreter at any time will enter sandbox mode. You can no longer re-enter challenge mode after entering into sandbox mode.\n")
         challenge_count += 1
         triple_trial = 0
         reset_cells()
@@ -435,8 +460,9 @@ while True:
   if challenge_count == 4:
     reset_cells()
     print("\nChallenge 5\n\nTake 2 numbers as input and ouput the difference of the greater number from the smaller one.\n")
+    print("Character Limit: 50\n")
     while challenge_count == 4:
-      c_limit = 35
+      c_limit = 50
       code()
       if challenge_count>4:
         break
@@ -462,6 +488,7 @@ while True:
         continue
       if triple_trial == 3:
         print("Challenge 5 passed!")
+        print("\nHint: Using SCCRS in the interpreter will allow you to reveal the optimal solution to a challenge while using SCCSC will skip non-optional challenges entirely.\n")
         challenge_count += 1
         triple_trial = 0
         reset_cells()
@@ -469,43 +496,45 @@ while True:
       else:
         continue
   
-  # if challenge_count == 5:
-  #   reset_cells()
-  #   print("\nChallenge 6\n\nTake 2 numbers as input and output the value of (1+x)^n where x is the first input and n is the second input.\n")
-  #   print("Hint: Just add 1 to the first input and then all you have to do is square it.\n")
-  #   while challenge_count == 5:
-  #     code()
-  #     if challenge_count>5:
-  #       break
-  #     if reveal_check == True:
-  #       reveal_check == False
-  #       continue
-  #     output = translator(input_code)
-  #     challenge_passed = answer_check(challenge_count,output)
-  #     if challenge_passed == True:
-  #       triple_trial+=1
-  #       if triple_trial == 1:
-  #         print("\nChallenge Success 1/3\n")
-  #       if triple_trial == 2:
-  #         print("\nChallenge Success 2/3\n")
-  #       if triple_trial == 3:
-  #         print("\nChallenge Success 3/3\n")
-  #       reset_cells()
-  #     else:
-  #       print("\nChallenge Failed\n")
-  #       reset_cells()
-  #       triple_trial = 0
-  #       continue
-  #     if triple_trial == 3:
-  #       print("Challenge 6 passed!")
-  #       challenge_count += 1
-  #       triple_trial = 0
-  #       reset_cells()
-  #       break
-  #     else:
-  #       continue
+  if challenge_count == 5:
+    if str(input("Attempt optional challenge?[y/n]")) == "y":
+      reset_cells()
+      print("\nChallenge 6\n\nTake 2 numbers as input and output the value of (1+x)^n where x is the first input and n is the second input.\n")
+      print("Hint: Just add 1 to the first input and then all you have to do is square it.\n")
+      while challenge_count == 5:
+        code()
+        if challenge_count>5:
+          break
+        if reveal_check == True:
+          reveal_check == False
+          continue
+        output = translator(input_code)
+        challenge_passed = answer_check(challenge_count,output)
+        if challenge_passed == True:
+          triple_trial+=1
+          if triple_trial == 1:
+            print("\nChallenge Success 1/3\n")
+          if triple_trial == 2:
+            print("\nChallenge Success 2/3\n")
+          if triple_trial == 3:
+            print("\nChallenge Success 3/3\n")
+          reset_cells()
+        else:
+          print("\nChallenge Failed\n")
+          reset_cells()
+          triple_trial = 0
+          continue
+        if triple_trial == 3:
+          print("Challenge 6 passed!")
+          challenge_count += 1
+          triple_trial = 0
+          reset_cells()
+          break
+        else:
+          continue
   if challenge_count>5:
     code()
+    c_limit = 2147483646
     if reveal_check == True:
       reveal_check == False
       continue
